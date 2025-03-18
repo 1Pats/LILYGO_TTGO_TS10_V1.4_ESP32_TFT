@@ -31,8 +31,8 @@ https://doc-tft-espi.readthedocs.io/
 
 Here are 4 examples, starting with the simplest one
 
-Important warning:  
-** **FOR THIS TO WORK, YOU HAVE TO ADAPT THE TFT_eSPI LIBRARY FILES - INCLUDES  
+Important warning, don't ignore this!
+** FOR THIS TO WORK, YOU HAVE TO ADAPT THE TFT_eSPI LIBRARY FILES - INCLUDES**  
 See instructions on how to do this, Verify the example of how it was done in my case.  
 Corrections are based on information about GPIO pins. You MUST know this information.  
 Without it, the TFT display will not work!  
