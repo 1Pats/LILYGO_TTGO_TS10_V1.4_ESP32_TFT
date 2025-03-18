@@ -11,6 +11,7 @@ LILYGO® TTGO TS V1.0 V1.4 ESP32 1.44 1.8 TFT MicroSD Card Slot Speaker MPU9250 
 As I had spent a lot of time, decided to share my experience to save it for others
 
 See picture here: 
+
 https://github.com/LilyGO/TTGO-TS/blob/master/Image/T10_V1.4.jpg
 
 The module is implemented as a breakout board based on ESP32.
