@@ -114,7 +114,7 @@
  * Conclusion: My breakout board does not have these sensors, despite the description
  * or the information is so hidden that I can't find it.
  *
- * Assume Wifi and Bluetooth is standard one, not testing here
+ * Assume MicroSD,Wifi and Bluetooth is standard one, not testing here
  */
 
 // taken from MPU9250.h  Hope this is a right way to do diagnostics
