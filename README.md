@@ -43,7 +43,7 @@ Without it, the TFT display will not work!
  Example 3 - added button support  
  Example 4 - added speaker, MPU9520 detection    
  
-Code is developed according to the KISS principle without using additional libraries
+Code is developed according to the KISS principle without using additional libraries.  
 See some info in the source file headers
 
 I could not find much information - it might lead to the wrong conclusion about missing sensors on the breakout board. Please share your experience if you are familiar with this stuff.
