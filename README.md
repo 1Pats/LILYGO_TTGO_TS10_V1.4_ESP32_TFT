@@ -1,18 +1,17 @@
 # LILYGO_TTGO_TS10_V1.4_ESP32_TFT
 Testing LILYGO TTGO TFT display TS10 V1.4
 
-Test Code - Screen, Colors, Keys, Speakers
+Test Code - Screen, Colors, Keys, Speakers  
 TFT displays are manufactured in large quantities. Vary with interface (pins, initialization), size, versions, mounting, power, quality, color depth, and touchscreen presence.  
 This one is only one, specific, and therefore cannot be generalized to others anyway.
 
 I bought this breakout board on AliExpress some time ago.  At some point, I checked my stuff and decided to use it.
-The full name is:
-LILYGO® TTGO TS V1.0 V1.4 ESP32 1.44 1.8 TFT MicroSD Card Slot Speaker MPU9250 Bluetooth Wifi Module 
+The full name is:  
+LILYGO® TTGO TS V1.0 V1.4 ESP32 1.44 1.8 TFT MicroSD Card Slot Speaker MPU9250 Bluetooth Wifi Module   
 As I had spent a lot of time, decided to share my experience to save it for others
 
-See picture here: 
-
-https://github.com/LilyGO/TTGO-TS/blob/master/Image/T10_V1.4.jpg
+See picture here:   
+https://github.com/LilyGO/TTGO-TS/blob/master/Image/T10_V1.4.jpg  
 
 The module is implemented as a breakout board based on ESP32.  
 ST7735 driver.    
@@ -33,7 +32,7 @@ https://doc-tft-espi.readthedocs.io/
 Here are 4 examples, starting with the simplest one
 
 Important warning:  
-FOR THIS TO WORK, YOU HAVE TO ADAPT THE TFT_eSPI LIBRARY FILES - INCLUDES  
+** **FOR THIS TO WORK, YOU HAVE TO ADAPT THE TFT_eSPI LIBRARY FILES - INCLUDES  
 See instructions on how to do this, Verify the example of how it was done in my case.  
 Corrections are based on information about GPIO pins. You MUST know this information.  
 Without it, the TFT display will not work!  
