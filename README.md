@@ -13,7 +13,8 @@ As I had spent a lot of time, decided to share my experience to save it for othe
 See picture here: 
 https://github.com/LilyGO/TTGO-TS/blob/master/Image/T10_V1.4.jpg
 
-The module is implemented as a breakout board based on ESP32
+The module is implemented as a breakout board based on ESP32.
+
 ST7735 driver.  
 Display size 1.8 inch
 Resolution 128x160
