@@ -3,8 +3,8 @@
  * LILYGO TTGO TS TFT test code,  display test
  * Code is based on the KISS principle
  * Created with one main goal - to use it for testing. I had spent a lot of time getting my breakout board to work. 
- * and I want to save time for other hobbyists. No big logics in this code - it is just for verification of the proposed functionality.
- * I bought this breakout board on AliExpress some time ago.  At some point I reworked my stuff and decided to use it.
+ * and I want to save time for other hobbyists. No big logic in this code - it is just for verification of the proposed functionality.
+ * I bought this breakout board on AliExpress some time ago.  At some point, I reworked my stuff and decided to use it.
  * Here is the full name of the item I bought:
  * LILYGO® TTGO TS V1.0 V1.4 ESP32 1.44 1.8 TFT MicroSD Card Slot Speaker MPU9250 Bluetooth Wifi Module 
  * I guess somewhere it is marked  as T10 V1.4
@@ -13,9 +13,9 @@
  * Module is implemented as a breakout board (display is soldered to ESP32)
  * This is my first TFT display, I was unfamiliar with all this stuff. I spent over a week trying to get it up and running, trying different libraries,
  * and searched through forums, YouTube...
- * Information is scarce, contradictory, code examples did not work, videos lack technical details, I almost gave up...
+ * Information is scarce and contradictory, code examples did not work, videos lack technical details, and I almost gave up...
  * A few additional facts as I dig deeper:
- * Adafruit https://www.adafruit.com/category/97 has snmth similar  (but only similar)
+ * Adafruit https://www.adafruit.com/category/97 has something similar  (but only similar)
  * ST7735 driver.  
  * Display size 1.8 inch
  * Resolution 128x160
@@ -29,7 +29,7 @@
  * https://github.com/Xinyuan-LilyGO/LilyGo_Txx - I found something there
  * Finally I stopped at the TFT_eSPI library.
  * https://github.com/Bodmer/TFT_eSPI
- * At a time when I was developing this code - the library had version 2.5.43.
+ * At the time when I was developing this code - the library had version 2.5.43.
  * The documentation is there, but unfortunately it was not up to date.
  * https://doc-tft-espi.readthedocs.io/
  * My first attempts were unsuccessful, but I finally got it to work.
@@ -41,8 +41,8 @@
  * commented line // #include <User_Setup.h> and uncommented #include <User_Setups/Setup2_ST7735.h>.
  * 3) The following has been done in file Setup2_ST7735.h
  * Replaced #define REDTAB with #define BLACKTAB (see around line 14)
- * This is a bit of a fuzzy parameter, initially stands for border colour around the screen, and as I understand it 
- * affects screen positioning and other behaviour.
+ * This is a bit of a fuzzy parameter, initially stands for border color around the screen, and as I understand it 
+ * affects screen positioning and other behavior.
  * You can experiment with it - all "TABS" are in ST7735_Defines.h.
  * 4) Commented previous pin definitions, added these (around line 28)
  * TFT display pins -----------------------------------------------------
@@ -75,13 +75,13 @@ void setup(void) {
   Serial.printf("TFT_WIDTH=  %3d|%d\n",  TFT_WIDTH,  tft.width());
   Serial.printf("TFT_HEIGHT= %3d|%d\n",  TFT_HEIGHT, tft.height());
 
-  tft.init();                                              // this is a critical command, usually code crashes here
+  tft.init();                                              // This is a critical command, usually code crashes here
   
   Serial.print("-");                                       // these printouts might help in debugging        
   tft.setTextFont(2);                                      // use a bit larger font (font size #2) 
   Serial.print("-");                                       // in printout it means - execution had passed init() and setTextFont();    
   tft.setTextColor(TFT_BLUE);                              // set text color
-  Serial.println("Initialized");                           // initializatio is completed
+  Serial.println("Initialized");                           // initialization is completed
 }
 
 /*
@@ -94,7 +94,7 @@ void loop() {
   static int16_t i = 0;                                    // iteration counter
 
   tft.fillScreen(TFT_BLACK);                               // sometimes fillScrean() leaves uncleared area
-  tft.setRotation(2);                                      // this is a workaround to make sure - the screen is clear
+  tft.setRotation(2);                                      // This is a workaround to make sure - the screen is clear
   tft.fillScreen(TFT_BLACK);         
   tft.setRotation(i%4);                                    // final rotation
                                     
