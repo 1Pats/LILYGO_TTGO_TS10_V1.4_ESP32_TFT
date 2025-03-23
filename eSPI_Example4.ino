@@ -4,8 +4,8 @@
  * 1Pats March 2025
  * Code is based on the KISS principle
  * Created with one main goal - to use it for testing. I had spent a lot of time getting my breakout board to work. 
- * and I want to save time for other hobbyists. No big logics in this code - it is just for verification of the proposed functionality.
- * I bought this breakout board on AliExpress some time ago.  At some point I reworked my stuff and decided to use it.
+ * and I want to save time for other hobbyists. No big logic in this code - it is just for verification of the proposed functionality.
+ * I bought this breakout board on AliExpress some time ago.  At some point, I reworked my stuff and decided to use it.
  * Here is the full name of the item I bought:
  * LILYGO® TTGO TS V1.0 V1.4 ESP32 1.44 1.8 TFT MicroSD Card Slot Speaker MPU9250 Bluetooth Wifi Module 
  * I guess somewhere it is marked  as T10 V1.4
@@ -14,9 +14,9 @@
  * Module is implemented as a breakout board (display is soldered to ESP32)
  * This is my first TFT display, I was unfamiliar with all this stuff. I spent over a week trying to get it up and running, trying different libraries,
  * and searched through forums, YouTube...
- * Information is scarce, contradictory, code examples did not work, videos lack technical details, I almost gave up...
+ * Information is scarce and contradictory, code examples did not work, videos lack technical details, and I almost gave up...
  * A few additional facts as I dig deeper:
- * Adafruit https://www.adafruit.com/category/97 has snmth similar  (but only similar)
+ * Adafruit https://www.adafruit.com/category/97 has something similar  (but only similar)
  * ST7735 driver.  
  * Display size 1.8 inch
  * Resolution 128x160
@@ -42,7 +42,7 @@
  * commented line // #include <User_Setup.h> and uncommented #include <User_Setups/Setup2_ST7735.h>.
  * 3) The following has been done in file Setup2_ST7735.h
  * Replaced #define REDTAB with #define BLACKTAB (see around line 14)
- * This is a bit of a fuzzy parameter, initially stands for border colour around the screen, and as I understand it 
+ * This is a bit of a fuzzy parameter, initially stands for border color around the screen, and as I understand it 
  * affects screen positioning and other behavior.
  * You can experiment with it - all "TABS" are in ST7735_Defines.h.
  * 4) Commented previous pin definitions, added these (around line 28)
@@ -80,12 +80,12 @@
  * The orientation of the display is quite important, so the example shows its effect. Unfortunately, graphics behave a bit differently for each rotation.
  *
  * March 12th
- * Added colour support
- * Noticed - TFT displays use colour coding I was not familiar with.
+ * Added color support
+ * Noticed - TFT displays use color coding I was not familiar with.
  * Researched it a bit - they are coded in RGB565 standard vs usual RGB888.
  * RGB888 uses one byte for each code component and can be stored in 3 bytes. R, G, B
  * RGB565 fits into 16 bits and can be stored in uint16_t (int on 16 bit processors)
- * Each colour occupies its part (bits) of the variable. The first 5 reserved for red colour, the next 6 - for green, remaining 5 - for blue
+ * Each color occupies its part (bits) of the variable. The first 5 reserved for red color, the next 6 - for green, remaining 5 - for blue
  * Here is a bit of theory:
  * https://support.touchgfx.com/docs/basic-concepts/color-formats
  * See converter example
@@ -114,7 +114,7 @@
  * Conclusion: My breakout board does not have these sensors, despite the description
  * or the information is so hidden that I can't find it.
  *
- * Assume MicroSD,Wifi and Bluetooth are standard one, not testing here
+ * Assume MicroSD, Wifi and Bluetooth are standard ones, not testing here
  */
 
 // taken from MPU9250.h  Hope this is the right way to do diagnostics
@@ -178,13 +178,13 @@ void vBeepShort(void){
  * implementation based on ledc type functions
  */
 void vPWMSiren(void){
-    ledcAttach(SPEAKER_OUT,5000,8);                                            // if you are selected this method, this call might be in setup
+    ledcAttach(SPEAKER_OUT,5000,8);                                            // if you selected this method, this call might be in setup
     for (uint32_t uiVal = 0; uiVal <= 255; uiVal++){ 
         uint32_t ulT = millis();
         ledcWrite(SPEAKER_OUT, uiVal);
         while(millis()-ulT < 5);
     }
-    ledcDetach(SPEAKER_OUT);                                                   //These calls are not necessary if you are using only this method
+    ledcDetach(SPEAKER_OUT);                                                   // These calls are not necessary if you are using only this method
     pinMode(SPEAKER_OUT, OUTPUT);                                              // restore output mode
 }
 
@@ -195,13 +195,13 @@ void vPWMSiren(void){
 #define I_BLUE   0
 typedef union {                                                                // this is a structure to quickly get color 32 bits value from bytes  
   uint32_t ulColor888;                                                         // 32 bits in memory (4 bytes)
-  byte bRGB[4];                                                                // Blue, Green,Red, dummy Each 8 bits
+  byte bRGB[4];                                                                // Blue, Green, Red, dummy Each 8 bits
 } tColor888;                                                                   // type of this union
 tColor888 ulColorStore;                                                        // variable used for color conversion
 
 /*
  * RGB565 standard support
- * converts color code stored in separate bytes bR,bG,bB
+ * converts color code stored in separate bytes bR, bG, bB
  * to uint32_t value (however only the last 16 bits are used,
  * but TFT displays frequently use uint32_t as an argument in functions)
  * Colors are reduced, as Red and Blue can store 2**5 values, green 2**6 
@@ -219,7 +219,7 @@ uint32_t ulRGBto565(byte bR, byte bG, byte bB){
  * vRGB565toBytes(ulRGB565, bR,bG,bB);
  * does not produce the same color component values. (RGB565 reduces color depth)
  *
- * After calling this function variables bR, bG, bB contain resulting values. (Variables are passed by adresses)
+ * After calling this function variables bR, bG, bB contain resulting values. (Variables are passed by address)
  */
 void vRGB565toBytes(uint32_t ulRGB565, byte &bR, byte &bG, byte &bB){  // 5+6+5 bits = 16 bits total
     bR = byte(((ulRGB565 >> 11) & 0x0000001F));                                //       5 bits  11 bits from end
@@ -228,7 +228,7 @@ void vRGB565toBytes(uint32_t ulRGB565, byte &bR, byte &bG, byte &bB){  // 5+6+5 
 }
 
 /*
- * Call this function, if left button is pressed
+ * Call this function, if the left button is pressed
  */
 void vCheckLeftButton(){                                       
    int iBtn = digitalRead(BUTTON_LEFT);                            
@@ -236,7 +236,7 @@ void vCheckLeftButton(){
 }
 
 /*
- * Call this function, if right button is prssed 
+ * Call this function, if the right button is pressed 
  */
 void vCheckRightButton(){
    int iBtn = digitalRead(BUTTON_RIGHT);                            
@@ -260,7 +260,7 @@ void vHorLines(){
 }
 
 /*
-* Fill screen with vertical lines
+* Fill the screen with vertical lines
 */
 void vVertLines(){ 
     int16_t iHeight = tft.height()- 2;                                         // real height of the screen
@@ -316,9 +316,9 @@ void vBar(){
   
 /*
  * very simple graphics test:
- * draw rectangle in blue color
- * and two crossig lines
- * ofssets are used as otherwise  no all lines on screen
+ * draw a rectangle in blue color
+ * and two crossing lines
+ * offsets are used as otherwise  no all lines on the screen
  */
 void vDrawEnvelope(){
   uint16_t iW = tft.width();                                                   // width of the screen
@@ -329,11 +329,11 @@ void vDrawEnvelope(){
 }
 
 /*
- * sometimes fillScrean() function leaves uncleared area
- * following function is workaround to bypass it.
+ * sometimes fillScrean() function leaves an uncleared area
+ * the following function is a workaround to bypass it.
  * defect can be seen after initiation of the screen. 
- * Next calls, seems, works well  
- * Probably this is a defect of my beakout board
+ * Next calls, seems, work well  
+ * Probably this is a defect of my breakout board
  */
 void vDeepClearAndRotate(uint8_t bRotate){
    tft.fillScreen(TFT_BLACK);
@@ -343,7 +343,7 @@ void vDeepClearAndRotate(uint8_t bRotate){
 }
 
 /* 
- * if button is not pressed delay execution for some time
+ * if the button is not pressed delay execution for some time
  */
 bool bBreak(){
   if (uiStatus != 0) return true;
@@ -462,7 +462,7 @@ void loop() {
 
   tft.fillScreen(TFT_BLACK);
   vBar();                                                                      // draw bars
-  if (bBreak()) return;                                                        // allow to see, but break execution , if buton is pressed 
+  if (bBreak()) return;                                                        // allow to see, but break execution, if button is pressed 
 
   tft.setTextColor(TFT_BLACK,TFT_BLACK);                                       // black fonts, transparent background
   tft.fillScreen(TFT_YELLOW);                                                  // now make screen yellow                            
@@ -474,7 +474,7 @@ void loop() {
   if (bBreak()) return;                                                        // allow time to see or interrupt furher excecution
   i++;                                                                         // next iteration
 
-  // here button press is effective only on press and hold mode- an inconvenient way. Here it is only for illustration purposses
+  // here button press is effective only on press and hold mode- an inconvenient way. Here it is only for illustration purposes
   int iBtnMiddle = digitalRead(BUTTON_MIDDLE);                                 // read button state in an usual way
   if (iBtnMiddle == LOW) uiStatus |= BUTTON_MIDDLE_PRESSED;                    // if pressed, set the bit                               
 } 
