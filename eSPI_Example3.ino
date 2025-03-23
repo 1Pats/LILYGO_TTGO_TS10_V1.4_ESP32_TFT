@@ -5,8 +5,8 @@
  * 1Pats March 2025
  * Code is based on the KISS principle
  * Created with one main goal - to use it for testing. I had spent a lot of time getting my breakout board to work. 
- * and I want to save time for other hobbyists. No big logics in this code - it is just for verification of the proposed functionality.
- * I bought this breakout board on AliExpress some time ago.  At some point I reworked my stuff and decided to use it.
+ * and I want to save time for other hobbyists. No big logic in this code - it is just for verification of the proposed functionality.
+ * I bought this breakout board on AliExpress some time ago.  At some point, I reworked my stuff and decided to use it.
  * Here is the full name of the item I bought:
  * LILYGO® TTGO TS V1.0 V1.4 ESP32 1.44 1.8 TFT MicroSD Card Slot Speaker MPU9250 Bluetooth Wifi Module 
  * I guess somewhere it is marked  as T10 V1.4
@@ -15,9 +15,9 @@
  * Module is implemented as a breakout board (display is soldered to ESP32)
  * This is my first TFT display, I was unfamiliar with all this stuff. I spent over a week trying to get it up and running, trying different libraries,
  * and searched through forums, YouTube...
- * Information is scarce, contradictory, code examples did not work, videos lack technical details, I almost gave up...
+ * Information is scarce, and contradictory, code examples did not work, videos lack technical details, and I almost gave up...
  * A few additional facts as I dig deeper:
- * Adafruit https://www.adafruit.com/category/97 has snmth similar  (but only similar)
+ * Adafruit https://www.adafruit.com/category/97 has something similar  (but only similar)
  * ST7735 driver.  
  * Display size 1.8 inch
  * Resolution 128x160
@@ -31,7 +31,7 @@
  * https://github.com/Xinyuan-LilyGO/LilyGo_Txx - I found something there
  * Finally I stopped at the TFT_eSPI library.
  * https://github.com/Bodmer/TFT_eSPI
- * At a time when I was developing this code - the library had version 2.5.43.
+ * At the time when I was developing this code - the library had version 2.5.43.
  * The documentation is there, but unfortunately it was not up to date.
  * https://doc-tft-espi.readthedocs.io/
  * My first attempts were unsuccessful, but I finally got it to work.
@@ -43,8 +43,8 @@
  * commented line // #include <User_Setup.h> and uncommented #include <User_Setups/Setup2_ST7735.h>.
  * 3) The following has been done in file Setup2_ST7735.h
  * Replaced #define REDTAB with #define BLACKTAB (see around line 14)
- * This is a bit of a fuzzy parameter, initially stands for border colour around the screen, and as I understand it 
- * affects screen positioning and other behaviour.
+ * This is a bit of a fuzzy parameter, initially stands for border color around the screen, and as I understand it 
+ * affects screen positioning and other behavior.
  * You can experiment with it - all "TABS" are in ST7735_Defines.h.
  * 4) Commented previous pin definitions, added these (around line 28)
  * TFT display pins -----------------------------------------------------
@@ -68,36 +68,36 @@
  * The orientation of the display is quite important, so the example shows its effect. Unfortunately, graphics behave a bit differently for each rotation.
  *
  * March 12th
- * Added colour support
- * Noticed - TFT displays use colour coding I was not familiar with.
+ * Added color support
+ * Noticed - TFT displays use color coding I was not familiar with.
  * Researched it a bit - they are coded in RGB565 standard vs usual RGB888.
  * RGB888 uses one byte for each code component and can be stored in 3 bytes. R, G, B
  * RGB565 fits into 16 bits and can be stored in uint16_t (int on 16 bit processors)
- * Each colour occupies its own part (bits) of the variable. First 5 reserved for red colour, next 6 - green, remaining 5 - blue
+ * Each color occupies its part (bits) of the variable. The first 5 reserved for red color, the next 6 - for green, remaining 5 - for blue
  * Here is a bit of theory:
  * https://support.touchgfx.com/docs/basic-concepts/color-formats
  * See converter example
- * Developed a few test functions as existing ones seemed too complex for simple test.
+ * Developed a few test functions as existing ones seemed too complex for simple tests.
  *
  * March 13th
  * Added test for buttons
- * Read middle button state at end of each iteration (ineffective way, you should press and hold until it triggers)
- * Reading left and right buttons is implemented as interrupts.
- * When one of these buttons is pressed, show it on screen and reset rotation to 0.
+ * Read the middle button state at the end of each iteration (ineffective way, you should press and hold until it triggers)
+ * Reading left and right buttons are implemented as interrupts.
+ * When one of these buttons is pressed, show it on the screen and reset rotation to 0.
  *
  */
 
 #define BAR_WIDTH        4                                                     // For bar testing function - bar width
-#define BAR_DIST         2                                                     // distance betweeb bars
+#define BAR_DIST         2                                                     // distance between bars
 
 #define DELAY_TIME       3000                                                  // delay between scenes
 #define DELAY_ELEMENTS   20                                                    // delay between elements drawing
 
-#define BUTTON_MIDDLE    34                                                    // find these pin numbers somewhere in documentation
+#define BUTTON_MIDDLE    34                                                    // find these pin numbers somewhere in the documentation
 #define BUTTON_LEFT      35
 #define BUTTON_RIGHT     39
 volatile uint16_t uiStatus = 0;                                                // system status
-#define BUTTON_LEFT_PRESSED     0x0001                                         // set this bit on if left button is pressed
+#define BUTTON_LEFT_PRESSED     0x0001                                         // set this bit on if the left button is pressed
 #define BUTTON_RIGHT_PRESSED    0x0002                                         // ... right
 #define BUTTON_MIDDLE_PRESSED   0x0004                                         // ... left
 
@@ -111,17 +111,17 @@ TFT_eSPI tft = TFT_eSPI();                                                     /
 #define I_BLUE   0
 typedef union {                                                                // this is a structure to quickly get color 32 bits value from bytes  
   uint32_t ulColor888;                                                         // 32 bits in memory (4 bytes)
-  byte bRGB[4];                                                                // Blue, Green,Red,dummy Each 8 bits
+  byte bRGB[4];                                                                // Blue, Green,Red, dummy Each 8 bits
 } tColor888;                                                                   // type of this union
 tColor888 ulColorStore;                                                        // variable used for color conversion
 
 /*
  * RGB565 standard support
  * converts color code stored in separate bytes bR,bG,bB
- * to uint32_t value (however only last 16 bits are used,
+ * to uint32_t value (however only the last 16 bits are used,
  * but TFT displays frequently use uint32_t as an argument in functions)
  * Colors are reduced, as Red and Blue can store 2**5 values, green 2**6 
- * while RGB888 standard can store 2**8 values for each color compoment 
+ * while RGB888 standard can store 2**8 values for each color component 
  */
 uint32_t ulRGBto565(byte bR, byte bG, byte bB){
    return  (((uint32_t)bR >> 3) << 11) | (((uint32_t)bG >> 2) << 5) | ((uint32_t)bB >> 3);
@@ -133,7 +133,7 @@ uint32_t ulRGBto565(byte bR, byte bG, byte bB){
  * Note: as RGB656 contains less number of colors (65536) than RGB888 standard (16777216), code:
  * uint32_t  ulRGB656 = ulRGBto565(bR,bG,bB);
  * vRGB565toBytes(ulRGB565, bR,bG,bB);
- * does not produce the same color component values. (RGB565 reduces color deebth)
+ * does not produce the same color component values. (RGB565 reduces color depth)
  *
  * After calling this function variables bR, bG, bB contain resulting values. (Variables are passed by adresses)
  */
@@ -168,7 +168,7 @@ void setup(void) {
   Serial.print("-");                                                           // these printouts might help in debugging                                     
   tft.setTextFont(2);                                                          // use a bit larger font (font size #2) 
  
-  Serial.println("Initialized");                                               // Setup completed succesfully
+  Serial.println("Initialized");                                               // Setup completed successfully
 
 }
 /*
@@ -230,8 +230,8 @@ void vDrawBar(int32_t iBarNumber, int32_t iBarHeight, uint32_t ulColor = TFT_WHI
    int16_t iW = tft.width()- 2;                                                // real width of screen
    int16_t iH = tft.height()-2;                                                // real height of screen  
    if (iX+BAR_WIDTH > iW) return;                                              // don't draw  this bar as it is out of the screen
-   if (iBarHeight > iH) iBarHeight = iH;                                       // if bar heigh exceeds scrren height, correct height
-   int16_t iYClear = iH-iBarHeight;                                            // remainig par needs to be cleared
+   if (iBarHeight > iH) iBarHeight = iH;                                       // if bar heigh exceeds screen height, correct height
+   int16_t iYClear = iH-iBarHeight;                                            // remaining par needs to be cleared
    if (iYClear > 0) tft.fillRect(iX, 2, BAR_WIDTH+BAR_DIST, iYClear, TFT_BLACK);   // clear the top of the bar 
    tft.fillRect(iX, iH-iBarHeight, BAR_WIDTH,iH,ulColor);                      // draw bar
 } 
@@ -260,8 +260,8 @@ void vBar(){
   
 /*
  * very simple graphics test:
- * draw rectangle in blue color
- * and two crossig lines
+ * draw a rectangle in blue color
+ * and two crossing lines
  */
 void vDrawEnvelope(){
   uint16_t iW = tft.width();                                                   // width of the screen
@@ -272,11 +272,11 @@ void vDrawEnvelope(){
 }
 
 /*
- * sometimes fillScrean() function leaves uncleared area
- * following function is workaround to bypass it.
+ * sometimes fillScrean() function leaves an uncleared area
+ * the following function is a workaround to bypass it.
  * defect can be seen after initiation of the screen. 
- * Next calls, seems, works well  
- * Probably this is a defect of my beakout board
+ * Next calls, seems, work well  
+ * Probably this is a defect of my breakout board
  */
 void vDeepClearAndRotate(uint8_t bRotate){
    tft.fillScreen(TFT_BLACK);
@@ -286,7 +286,7 @@ void vDeepClearAndRotate(uint8_t bRotate){
 }
 
 /* 
- * if button is not prssed delay execution for some time
+ * if the button is not pressed delay execution for some time
  */
 bool bBreak(){
   if (uiStatus != 0) return true;
