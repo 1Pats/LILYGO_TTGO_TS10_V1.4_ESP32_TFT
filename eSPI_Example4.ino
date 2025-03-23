@@ -43,7 +43,7 @@
  * 3) The following has been done in file Setup2_ST7735.h
  * Replaced #define REDTAB with #define BLACKTAB (see around line 14)
  * This is a bit of a fuzzy parameter, initially stands for border colour around the screen, and as I understand it 
- * affects screen positioning and other behaviour.
+ * affects screen positioning and other behavior.
  * You can experiment with it - all "TABS" are in ST7735_Defines.h.
  * 4) Commented previous pin definitions, added these (around line 28)
  * TFT display pins -----------------------------------------------------
@@ -85,24 +85,24 @@
  * Researched it a bit - they are coded in RGB565 standard vs usual RGB888.
  * RGB888 uses one byte for each code component and can be stored in 3 bytes. R, G, B
  * RGB565 fits into 16 bits and can be stored in uint16_t (int on 16 bit processors)
- * Each colour occupies its own part (bits) of the variable. First 5 reserved for red colour, next 6 - green, remaining 5 - blue
+ * Each colour occupies its part (bits) of the variable. The first 5 reserved for red colour, the next 6 - for green, remaining 5 - for blue
  * Here is a bit of theory:
  * https://support.touchgfx.com/docs/basic-concepts/color-formats
  * See converter example
- * Developed a few test functions as existing ones seemed too complex for simple test.
+ * Developed a few test functions as existing ones seemed too complex for simple tests.
  *
  * March 13rh
  * Added test for buttons
- * Read middle button state at end of each iteration (ineffective way, you should press and hold until it triggers)
- * Reading left and right buttons is implemented as interrupts.
- * When one of these buttons is pressed, show it on screen and reset rotation to 0.
+ * Read the middle button state at the end of each iteration (ineffective way, you should press and hold until it triggers)
+ * Reading left and right buttons are implemented as interrupts.
+ * When one of these buttons is pressed, show it on the screen and reset rotation to 0.
  *
  * March 14h
- * Added speaker test. Speaker is a small device soldered to the main board with two wires and looks like this: 
+ * Added speaker test. The speaker is a small device soldered to the main board with two wires and looks like this: 
  * https://www.aliexpress.com/item/1005003557965245.html?spm=a2g0o.productlist.main.1.ef0f17e8QJavXb&algo_pvid=8db04d76-0577-4c9f-b037-d15eb010dcd5&algo_exp_id=8db04d76-0577-4c9f-b037-d15eb010dcd5-0&pdp_ext_f=%7B%22order%22%3A%223%22%2C%22eval%22%3A%221%22%7D&pdp_npi=4%40dis%21EUR%210.55%210.55%21%21%210.58%210.58%21%40210390b817419549562573866eac91%2112000026278525230%21sea%21LV%21119660369%21X&curPageLogUid=YGxgNtBbECoQ&utparam-url=scene%3Asearch%7Cquery_from%3A
  * Sound support can be implemented in two ways:
  * as direct writing to the port (see vBeepShort(); vBeepLong());
- * as PWM manipulation based on ledc type functions (see vPWMSound()).
+ * as PWM manipulation based on ledc type functions (see vPWMSiren()).
  * If everything works, you should hear the sound at the beginning of each iteration.
  * 
  * March 18th
@@ -114,10 +114,10 @@
  * Conclusion: My breakout board does not have these sensors, despite the description
  * or the information is so hidden that I can't find it.
  *
- * Assume MicroSD,Wifi and Bluetooth is standard one, not testing here
+ * Assume MicroSD,Wifi and Bluetooth are standard one, not testing here
  */
 
-// taken from MPU9250.h  Hope this is a right way to do diagnostics
+// taken from MPU9250.h  Hope this is the right way to do diagnostics
 #define AK8963_ADDRESS          0x0C                                           // Magnetometer Registers
 #define WHO_AM_I_AK8963         0x00 
 #define AK8963_I2C              0x48
@@ -133,7 +133,7 @@
 #define DELAY_ELEMENTS          20                                             // delay between elements drawing
 
 volatile uint16_t uiStatus    = 0;                                             // system status
-#define BUTTON_LEFT_PRESSED     0x0001                                         // set this bit on if left button is pressed
+#define BUTTON_LEFT_PRESSED     0x0001                                         // set this bit on if the left button is pressed
 #define BUTTON_RIGHT_PRESSED    0x0002                                         // ... right
 #define BUTTON_MIDDLE_PRESSED   0x0004                                         // ... left
 
@@ -142,11 +142,11 @@ volatile uint16_t uiStatus    = 0;                                             /
 TFT_eSPI tft = TFT_eSPI();                                                     // includes MUST(!) be corrected to make it working
 
 
-// Speaker suppport utilities
+// Speaker support utilities
 /* 
  * Simplest implementation of sound
  * long beep
- * argument is number of loops to perform
+ * argument is the number of loops to perform
  * default value is 16
  */
 void vBeepLong(uint8_t bTimes = 16){
@@ -178,13 +178,13 @@ void vBeepShort(void){
  * implementation based on ledc type functions
  */
 void vPWMSiren(void){
-    ledcAttach(SPEAKER_OUT,5000,8);                                            // if you are sected this method, this call might be in setup
+    ledcAttach(SPEAKER_OUT,5000,8);                                            // if you are selected this method, this call might be in setup
     for (uint32_t uiVal = 0; uiVal <= 255; uiVal++){ 
         uint32_t ulT = millis();
         ledcWrite(SPEAKER_OUT, uiVal);
         while(millis()-ulT < 5);
     }
-    ledcDetach(SPEAKER_OUT);                                                   // these calls are not necessary, if you are using only this method
+    ledcDetach(SPEAKER_OUT);                                                   //These calls are not necessary if you are using only this method
     pinMode(SPEAKER_OUT, OUTPUT);                                              // restore output mode
 }
 
@@ -195,17 +195,17 @@ void vPWMSiren(void){
 #define I_BLUE   0
 typedef union {                                                                // this is a structure to quickly get color 32 bits value from bytes  
   uint32_t ulColor888;                                                         // 32 bits in memory (4 bytes)
-  byte bRGB[4];                                                                // Blue, Green,Red,dummy Each 8 bits
+  byte bRGB[4];                                                                // Blue, Green,Red, dummy Each 8 bits
 } tColor888;                                                                   // type of this union
 tColor888 ulColorStore;                                                        // variable used for color conversion
 
 /*
  * RGB565 standard support
  * converts color code stored in separate bytes bR,bG,bB
- * to uint32_t value (however only last 16 bits are used,
+ * to uint32_t value (however only the last 16 bits are used,
  * but TFT displays frequently use uint32_t as an argument in functions)
  * Colors are reduced, as Red and Blue can store 2**5 values, green 2**6 
- * while RGB888 standard can store 2**8 values for each color compoment 
+ * while RGB888 standard can store 2**8 values for each color component 
  */
 uint32_t ulRGBto565(byte bR, byte bG, byte bB){
    return  (((uint32_t)bR >> 3) << 11) | (((uint32_t)bG >> 2) << 5) | ((uint32_t)bB >> 3);
@@ -217,7 +217,7 @@ uint32_t ulRGBto565(byte bR, byte bG, byte bB){
  * Note: as RGB656 contains less number of colors (65536) than RGB888 standard (16777216), code:
  * uint32_t  ulRGB656 = ulRGBto565(bR,bG,bB);
  * vRGB565toBytes(ulRGB565, bR,bG,bB);
- * does not produce the same color component values. (RGB565 reduces color deebth)
+ * does not produce the same color component values. (RGB565 reduces color depth)
  *
  * After calling this function variables bR, bG, bB contain resulting values. (Variables are passed by adresses)
  */
@@ -286,8 +286,8 @@ void vDrawBar(int32_t iBarNumber, int32_t iBarHeight, uint32_t ulColor = TFT_WHI
    int16_t iW = tft.width()- 2;                                                // real width of screen
    int16_t iH = tft.height()-2;                                                // real height of screen  
    if (iX+BAR_WIDTH > iW) return;                                              // don't draw  this bar as it is out of the screen
-   if (iBarHeight > iH) iBarHeight = iH;                                       // if bar heigh exceeds scrren height, correct height
-   int16_t iYClear = iH-iBarHeight;                                            // remainig par needs to be cleared
+   if (iBarHeight > iH) iBarHeight = iH;                                       // if bar heigh exceeds screen height, correct height
+   int16_t iYClear = iH-iBarHeight;                                            // remaining par needs to be cleared
    if (iYClear > 0) tft.fillRect(iX, 2, BAR_WIDTH+BAR_DIST, iYClear, TFT_BLACK);   // clear the top of the bar 
    tft.fillRect(iX, iH-iBarHeight, BAR_WIDTH,iH,ulColor);                      // draw bar
 } 
@@ -323,7 +323,7 @@ void vBar(){
 void vDrawEnvelope(){
   uint16_t iW = tft.width();                                                   // width of the screen
   uint16_t iH = tft.height();                                                  // height of the screen
-  tft.drawRect(2,     2,   iW-2, iH-2, TFT_BLUE);                              // ofsets might be  different for different rotations
+  tft.drawRect(2,     2,   iW-2, iH-2, TFT_BLUE);                              // offsets might be  different for different rotations
   tft.drawLine(2,     2,   iW-2, iH-2, TFT_BLUE);                              // draw first crossing line- top, left to bottom, right
   tft.drawLine(iW-2,  2,   2,    iH-2, TFT_BLUE);                              // draw second crossing line top, right to bottom, left
 }
@@ -392,25 +392,25 @@ void setup(void) {
 
   Serial.print("-");                                                           // these printouts might help in debugging  
 
-  // create interrupts for buttons processing
+  // Create interrupts for button processing
   attachInterrupt(digitalPinToInterrupt(BUTTON_LEFT),vCheckLeftButton,FALLING);   // interrupt execution, if left button is pressed
   attachInterrupt(digitalPinToInterrupt(BUTTON_RIGHT),vCheckRightButton,FALLING); // interrupt execution, if right button is pressed
 
   Serial.print("-");                                                           // these printouts might help in debugging  
-  tft.init();                                                                  // this is a critical command, usually setup code crashes here
+  tft.init();                                                                  //This is a critical command, usually setup code crashes here
   Serial.print("-");                                                           // these printouts might help in debugging                                     
   tft.setTextFont(2);                                                          // use a bit larger font (font size #2) 
  
   vPWMSiren();                                                                 // Play sound at the end of setup
  
-  Serial.println("Initialized");                                               // Setup completed succesfully
+  Serial.println("Initialized");                                               // Setup completed successfully
 }
 
 void loop() {
   char cBuff[15];                                                              // buffer to create output string
   static int16_t i = 0;                                                        // iteration counter
   vDeepClearAndRotate(i%4);                                                    // clear screen, set rotation
-  switch(i%4) {                                                                // play deifferent song at the beginning of each iteration 
+  switch(i%4) {                                                                // play different song at the beginning of each iteration 
     case 0:
          vBeepLong(32);                       
          break;
@@ -445,7 +445,7 @@ void loop() {
       vBeepShort();
   }
   delay(DELAY_TIME);                                                           // allow to see
-  if (uiStatus != 0) {                                                         // if one of buttons pressed- just start iterations from beginning                                                    
+  if (uiStatus != 0) {                                                         // if one of the buttons is pressed- just start iterations from the beginning                                                    
       uiStatus &= ~(BUTTON_LEFT_PRESSED|BUTTON_MIDDLE_PRESSED|BUTTON_RIGHT_PRESSED);    // reset button status bits
       i = 0;
       return;
@@ -454,7 +454,7 @@ void loop() {
   tft.fillScreen(TFT_BLACK);                                                   // clear screen
   tft.setTextColor(TFT_BLACK,TFT_WHITE);                                       // now use black font
   vHorLines();                                                                 // draw horizontal lines
-  if (bBreak()) return;                                                        // allow to see, but break, if buton is pressed. Reaction to left or rght button whivh might be pressed asynchronously 
+  if (bBreak()) return;                                                        // allow to see, but break, if button is pressed. Reaction to the left or right button whivh might be pressed asynchronously 
 
   tft.setTextColor(TFT_BLACK,TFT_RED); 
   vVertLines();                                                                // draw vertical lines
@@ -474,7 +474,7 @@ void loop() {
   if (bBreak()) return;                                                        // allow time to see or interrupt furher excecution
   i++;                                                                         // next iteration
 
-  // here button press is effective only on press and hold mode- an unconvinent way. Here it is only for illustration purposs
+  // here button press is effective only on press and hold mode- an inconvenient way. Here it is only for illustration purposses
   int iBtnMiddle = digitalRead(BUTTON_MIDDLE);                                 // read button state in an usual way
   if (iBtnMiddle == LOW) uiStatus |= BUTTON_MIDDLE_PRESSED;                    // if pressed, set the bit                               
 } 
@@ -487,7 +487,7 @@ uint8_t bReadByte(uint8_t bAddress, uint8_t bSubAddress) {
   uint8_t bData;                                                               // data` will store the register data   
   Wire.beginTransmission(bAddress);                                            // Initialize the Tx buffer
   Wire.write(bSubAddress);                                                     // Put slave register address in Tx buffer
-  Wire.endTransmission(false);                                                 // Send the Tx buffer, but send a restart to keep connection alive
+  Wire.endTransmission(false);                                                 // Send the Tx buffer, but send a restart to keep the connection alive
   Wire.requestFrom(bAddress, (uint8_t) 1);                                      // Read one byte from slave register address 
   bData = Wire.read();                                                         // Fill Rx buffer with result
   return bData;                                                                // Return data read from slave register
